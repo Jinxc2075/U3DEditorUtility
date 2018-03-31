@@ -11,6 +11,37 @@ namespace U3DEditorUtility
 {
     public class BundleBuilder
     {
+        [MenuItem("Tools/打包工具/生成LUA打包名", false, 20)]
+        static void SetLuaBundleName()
+        {
+            UnityEngine.Debug.Log("=========Set Lua bundle name start..");
+
+            string appPath = Application.dataPath + "/";
+            string projPath = appPath.Substring(0, appPath.Length - 7);
+            string fullPath = projPath + "/Assets/Lua";
+
+            DirectoryInfo dir = new DirectoryInfo(fullPath);
+            var files = dir.GetFiles("*.txt", SearchOption.AllDirectories);
+            for (var i = 0; i < files.Length; ++i)
+            {
+                var fileInfo = files[i];
+                string path = fileInfo.FullName.Replace('\\', '/').Substring(projPath.Length);
+                var importer = AssetImporter.GetAtPath(path);
+                if (importer)
+                {
+                    string targetName = "lua.unity3d";
+                    if (importer.assetBundleName != targetName)
+                    {
+                        importer.assetBundleName = targetName;
+                    }
+                }
+            }
+
+            AssetDatabase.Refresh();
+
+            UnityEngine.Debug.Log("=========Set Lua bundle name finished.." + files.Length + " processed");
+        }
+
         [MenuItem("Tools/打包工具/生成资源打包名", false, 20)]
         static void SetResourcesAssetBundleName()
         {

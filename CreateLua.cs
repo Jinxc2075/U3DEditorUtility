@@ -16,7 +16,7 @@ namespace U3DEditorUtility
         {
             ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0,
                 ScriptableObject.CreateInstance<CreateScriptAssetAction>(),
-                GetSelectedPathOrFallback() + "/New Lua.lua",
+                GetSelectedPathOrFallback() + "/NewLua.lua",
                 null,
                 "Assets/Lua/luaTemplate.lua");
         }
@@ -46,6 +46,7 @@ namespace U3DEditorUtility
             //高亮显示该资源
             ProjectWindowUtil.ShowCreatedAsset(obj);
         }
+
         internal static UnityEngine.Object CreateAssetFromTemplate(string pahtName, string resourceFile)
         {
             //获取要创建的资源的绝对路径
