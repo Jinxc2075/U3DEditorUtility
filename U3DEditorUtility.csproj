@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BundleBuilder.cs" />
+    <Compile Include="CopyLua.cs" />
     <Compile Include="CreateLua.cs" />
   </ItemGroup>
   <ItemGroup>
