@@ -16,9 +16,9 @@ namespace U3DEditorUtility
         {
             ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0,
                 ScriptableObject.CreateInstance<CreateScriptAssetAction>(),
-                GetSelectedPathOrFallback() + "/NewLua.lua.txt",
+                GetSelectedPathOrFallback() + "/NewLua.lua",
                 null,
-                "Assets/Lua/luaTemplate.lua.txt");
+                "Assets/Lua/luaTemplate.lua");
         }
 
         public static string GetSelectedPathOrFallback()

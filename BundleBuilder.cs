@@ -11,6 +11,34 @@ namespace U3DEditorUtility
 {
     public class BundleBuilder
     {
+        [MenuItem("Tools/打包工具/清空所有打包名", false, 20)]
+        static void CleanResourcesAssetBundleName()
+        {
+            string appPath = Application.dataPath + "/";
+            string projPath = appPath.Substring(0, appPath.Length - 7);
+            string fullPath = projPath + "/Assets/Resources";
+
+            DirectoryInfo dir = new DirectoryInfo(fullPath);
+            var files = dir.GetFiles("*", SearchOption.AllDirectories);
+            for (var i = 0; i < files.Length; ++i)
+            {
+                var fileInfo = files[i];
+                string path = fileInfo.FullName.Replace('\\', '/').Substring(projPath.Length);
+                EditorUtility.DisplayProgressBar("清理打包资源名称", "正在处理" + fileInfo.Name, 1f * i / files.Length);
+                var importer = AssetImporter.GetAtPath(path);
+                if (importer)
+                {
+                    importer.assetBundleName = null;
+                }
+            }
+
+            AssetDatabase.Refresh();
+
+            EditorUtility.ClearProgressBar();
+
+            UnityEngine.Debug.Log("=========clean Lua bundle name finished.." + files.Length + " processed");
+        }
+
         [MenuItem("Tools/打包工具/生成LUA打包名", false, 20)]
         static void SetLuaBundleName()
         {
@@ -18,7 +46,7 @@ namespace U3DEditorUtility
 
             string appPath = Application.dataPath + "/";
             string projPath = appPath.Substring(0, appPath.Length - 7);
-            string fullPath = projPath + "/Assets/Lua";
+            string fullPath = projPath + "/Assets/Resources/Lua";
 
             DirectoryInfo dir = new DirectoryInfo(fullPath);
             var files = dir.GetFiles("*.txt", SearchOption.AllDirectories);
@@ -26,6 +54,7 @@ namespace U3DEditorUtility
             {
                 var fileInfo = files[i];
                 string path = fileInfo.FullName.Replace('\\', '/').Substring(projPath.Length);
+                EditorUtility.DisplayProgressBar("设置lua打包名称", "正在处理" + fileInfo.Name, 1f * i / files.Length);
                 var importer = AssetImporter.GetAtPath(path);
                 if (importer)
                 {
@@ -39,6 +68,8 @@ namespace U3DEditorUtility
 
             AssetDatabase.Refresh();
 
+            EditorUtility.ClearProgressBar();
+
             UnityEngine.Debug.Log("=========Set Lua bundle name finished.." + files.Length + " processed");
         }
 
@@ -47,18 +78,22 @@ namespace U3DEditorUtility
         {
             string appPath = Application.dataPath + "/";
             string projPath = appPath.Substring(0, appPath.Length - 7);
-            string fullPath = projPath + "/Assets/Packages";
-            string[] searchExtensions = new[] {".prefab", ".asset", ".mat", ".txt"};
+            
+            string[] searchExtensions = new[] {".prefab", ".mat", ".txt"};
             Regex[] excluseRules = new Regex[] 
             {
-                //new Regex (@"(\S+)(\/Scenes\/Z-zhucheng)(\S+)"),
+                new Regex (@"^.*/Lua/.*$"), //忽略掉lua脚本，这些脚本会单独打包
             };
 
-            SetDirAssetBundleName(fullPath, searchExtensions, excluseRules);
-
-            fullPath = projPath + "/Assets/Resources";
+            string fullPath = projPath + "/Assets/Resources";
 
             SetDirAssetBundleName(fullPath, searchExtensions, excluseRules);
+
+            AssetDatabase.Refresh();
+
+            EditorUtility.ClearProgressBar();
+
+            UnityEngine.Debug.Log("=========Set resource bundle name finished....");
         }
 
         [MenuItem("Tools/打包工具/生成打包文件Android", false, 20)]
@@ -76,7 +111,6 @@ namespace U3DEditorUtility
             string projPath = Application.dataPath.Substring(0, Application.dataPath.Length - 6);
             BuildPipeline.BuildAssetBundles(assetBundleOutputDir.Substring(projPath.Length), build_options, BuildTarget.Android);
 
-            AssetDatabase.Refresh();
             UnityEngine.Debug.Log("=========Build AssetBundles Android finished..");
         }
 
