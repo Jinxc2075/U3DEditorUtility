@@ -7,9 +7,12 @@ using UnityEditor;
 using UnityEditor.ProjectWindowCallback;
 using UnityEngine;
 
+/// <summary>
+/// 让编辑器支持从模板文件中创建.lua文件
+/// </summary>
 namespace U3DEditorUtility
 {
-    class CreateLua
+    internal class CreateLua
     {
         [MenuItem("Assets/Create/Lua Script", false, 80)]
         public static void CreateNewLua()
@@ -37,7 +40,7 @@ namespace U3DEditorUtility
         }
     }
 
-    class CreateScriptAssetAction : EndNameEditAction
+    internal class CreateScriptAssetAction : EndNameEditAction
     {
         public override void Action(int instanceId, string pathName, string resourceFile)
         {
@@ -47,19 +50,18 @@ namespace U3DEditorUtility
             ProjectWindowUtil.ShowCreatedAsset(obj);
         }
 
-        internal static UnityEngine.Object CreateAssetFromTemplate(string pahtName, string resourceFile)
+        internal static UnityEngine.Object CreateAssetFromTemplate(string pathName, string resourceFile)
         {
             //获取要创建的资源的绝对路径
-            string fullName = Path.GetFullPath(pahtName);
+            string fullName = Path.GetFullPath(pathName);
+            
             //读取本地模板文件
             StreamReader reader = new StreamReader(resourceFile);
             string content = reader.ReadToEnd();
             reader.Close();
 
-            //获取资源的文件名
-            // string fileName = Path.GetFileNameWithoutExtension(pahtName);
             //替换默认的文件名
-            content = content.Replace("#TIME", System.DateTime.Now.ToString("yyyy年MM月dd日 HH:mm:ss dddd"));
+            content = content.Replace("#TIME", DateTime.Now.ToString("yyyy年MM月dd日 HH:mm:ss dddd"));
 
             //写入新文件
             StreamWriter writer = new StreamWriter(fullName, false, System.Text.Encoding.UTF8);
@@ -67,10 +69,10 @@ namespace U3DEditorUtility
             writer.Close();
 
             //刷新本地资源
-            AssetDatabase.ImportAsset(pahtName);
+            AssetDatabase.ImportAsset(pathName);
             AssetDatabase.Refresh();
 
-            return AssetDatabase.LoadAssetAtPath(pahtName, typeof(UnityEngine.Object));
+            return AssetDatabase.LoadAssetAtPath(pathName, typeof(UnityEngine.Object));
         }
     }
 }

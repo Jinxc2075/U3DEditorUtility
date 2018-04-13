@@ -7,12 +7,15 @@ using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 
+/// <summary>
+/// 几个打包使用的菜单功能实现
+/// </summary>
 namespace U3DEditorUtility
 {
     public class BundleBuilder
     {
-        [MenuItem("Tools/打包工具/清空所有打包名", false, 20)]
-        static void CleanResourcesAssetBundleName()
+        [MenuItem(itemName: "Tools/打包工具/清空所有打包名", isValidateFunction: false, priority: 20)]
+        private static void CleanResourcesAssetBundleName()
         {
             string appPath = Application.dataPath + "/";
             string projPath = appPath.Substring(0, appPath.Length - 7);
@@ -36,13 +39,13 @@ namespace U3DEditorUtility
 
             EditorUtility.ClearProgressBar();
 
-            UnityEngine.Debug.Log("=========clean Lua bundle name finished.." + files.Length + " processed");
+            Debug.Log("=========clean Lua bundle name finished.." + files.Length + " processed");
         }
 
-        [MenuItem("Tools/打包工具/生成LUA打包名", false, 20)]
-        static void SetLuaBundleName()
+        [MenuItem(itemName: "Tools/打包工具/生成LUA打包名", isValidateFunction: false, priority: 20)]
+        private static void SetLuaBundleName()
         {
-            UnityEngine.Debug.Log("=========Set Lua bundle name start..");
+            Debug.Log("=========Set Lua bundle name start..");
 
             string appPath = Application.dataPath + "/";
             string projPath = appPath.Substring(0, appPath.Length - 7);
@@ -70,11 +73,11 @@ namespace U3DEditorUtility
 
             EditorUtility.ClearProgressBar();
 
-            UnityEngine.Debug.Log("=========Set Lua bundle name finished.." + files.Length + " processed");
+            Debug.Log("=========Set Lua bundle name finished.." + files.Length + " processed");
         }
 
-        [MenuItem("Tools/打包工具/生成资源打包名", false, 20)]
-        static void SetResourcesAssetBundleName()
+        [MenuItem(itemName: "Tools/打包工具/生成资源打包名", isValidateFunction: false, priority: 20)]
+        private static void SetResourcesAssetBundleName()
         {
             string appPath = Application.dataPath + "/";
             string projPath = appPath.Substring(0, appPath.Length - 7);
@@ -93,11 +96,11 @@ namespace U3DEditorUtility
 
             EditorUtility.ClearProgressBar();
 
-            UnityEngine.Debug.Log("=========Set resource bundle name finished....");
+            Debug.Log("=========Set resource bundle name finished....");
         }
 
-        [MenuItem("Tools/打包工具/生成打包文件Android", false, 20)]
-        static void BuildAllAssetBundlesAndroid()
+        [MenuItem(itemName: "Tools/打包工具/生成打包文件Android", isValidateFunction: false, priority: 20)]
+        private static void BuildAllAssetBundlesAndroid()
         {
             UnityEngine.Debug.Log("=========Build AssetBundles Android start..");
             //用lz4格式压缩
@@ -111,16 +114,16 @@ namespace U3DEditorUtility
             string projPath = Application.dataPath.Substring(0, Application.dataPath.Length - 6);
             BuildPipeline.BuildAssetBundles(assetBundleOutputDir.Substring(projPath.Length), build_options, BuildTarget.Android);
 
-            UnityEngine.Debug.Log("=========Build AssetBundles Android finished..");
+            Debug.Log("=========Build AssetBundles Android finished..");
         }
 
         /// <summary>
         /// 设置某个目录及子目录下资源打包名称
         /// </summary>
-        /// <param name="fullPath"></param>
-        /// <param name="searchExtensions"></param>
-        /// <param name="excluseRules"></param>
-        static void SetDirAssetBundleName(string fullPath, string[] searchExtensions, Regex[] excluseRules)
+        /// <param name="fullPath">搜索资源的目录路径</param>
+        /// <param name="searchExtensions">要打包的资源扩展名</param>
+        /// <param name="excluseRules">要排除掉的资源，用正则表达式</param>
+        private static void SetDirAssetBundleName(string fullPath, string[] searchExtensions, Regex[] excluseRules)
         {
             if (!Directory.Exists(fullPath))
             {
@@ -162,8 +165,11 @@ namespace U3DEditorUtility
                         break;
                     }
                 }
+
                 if (isExcluse)
+                {
                     continue;
+                }
 
                 string path = fileInfo.FullName.Replace('\\', '/').Substring(projPath.Length);
                 var importer = AssetImporter.GetAtPath(path);

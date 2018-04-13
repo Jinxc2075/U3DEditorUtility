@@ -37,16 +37,17 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="UnityEditor">
-      <HintPath>C:\Program Files\Unity5.6\Editor\Data\Managed\UnityEditor.dll</HintPath>
+      <HintPath>C:\Program Files\Unity\Editor\Data\Managed\UnityEditor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>C:\Program Files\Unity5.6\Editor\Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>C:\Program Files\Unity\Editor\Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BundleBuilder.cs" />
     <Compile Include="CopyLua.cs" />
     <Compile Include="CreateLua.cs" />
+    <Compile Include="luaInspector.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
