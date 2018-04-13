@@ -47,7 +47,7 @@
     <Compile Include="BundleBuilder.cs" />
     <Compile Include="CopyLua.cs" />
     <Compile Include="CreateLua.cs" />
-    <Compile Include="luaInspector.cs" />
+    <Compile Include="LuaInspector.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
